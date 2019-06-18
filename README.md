@@ -1,5 +1,7 @@
 # vuex_tut
 
+a simple to-do manager i wrote in an afternoon to become firmiliar with VueJS and Vuex.
+
 ## Project setup
 ```
 npm install
