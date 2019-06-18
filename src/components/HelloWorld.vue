@@ -1,40 +1,50 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+     <div class='left'>
+        <h1> {{ title }} </h1>
+        <form @submit.prevent="addTask">
+          <input class="task-input" type='text' placeholder='Get crackin!' v-model='newTask' />
+        </form>
+        <h2 v-if="tasks.length < 1"> No work? Lucky you!</h2>
+        <ul>
+          <li v-for="(task, index) in tasks" v-bind:key='index'>
+            <button class="btn" v-on:click="removeTask(index)">{{ task }}</button>
+          </li>
+        </ul>
+     </div>
+     <div class='right'>
+     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String,
+  data() {
+    return {
+      newTask: '',
+    };
+  },
+  computed: {
+    ...mapState([
+      'title',
+      'tasks',
+    ]),
+  },
+  methods: {
+    ...mapMutations([
+      'ADD_TASK',
+      'REMOVE_TASK',
+    ]),
+    addTask() {
+      this.ADD_TASK(this.newTask);
+      this.newTask = '';
+    },
+    removeTask(x) {
+      this.REMOVE_TASK(x);
+    },
   },
 };
 </script>
@@ -49,10 +59,25 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
-  margin: 0 10px;
+  padding: 10;
+  display: block;
+  margin-bottom: 100 200px;
 }
 a {
   color: #42b983;
 }
+
+.btn {
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* On mouse-over */
+.btn:hover {background: #eee;}
+
+
 </style>
